@@ -1,2 +1,2 @@
-<h1>Carlito London</h1>
+<h1 class="text-3xl flex justify-center">carlito london</h1>
 

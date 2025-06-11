@@ -1,5 +1,8 @@
 <script lang="ts">
 	import '../app.css';
+	import { page } from '$app/state';
+
+	let currentPage = $state(page.url.pathname);
 
 	let { children } = $props();
 
@@ -9,15 +12,16 @@
 		{name: "about", link: "/about"},
 		{name: "contact", link: "/contact"}
 	];
-		
+	
 </script>
 
 <nav>
-	<ul class="style=none">
-	{#each navLinks as link}
-	<a href={link.link}><li>{link.name}</li></a>
-	{/each}
+	<ul class="flex  gap-4 justify-center">
+		{#each navLinks as link}
+		<li class="underline hover:underline-offset-6"><a href={link.link}>{link.name}</a></li>
+		{/each}
 	</ul>
 </nav>
+
 
 {@render children()}

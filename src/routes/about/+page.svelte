@@ -3,5 +3,6 @@
 
     let { data }: { data: PageData } = $props();
 </script>
-
-<h1>about</h1>
+<header>
+<h1 class="text-3xl flex justify-center">about</h1>
+</header>
