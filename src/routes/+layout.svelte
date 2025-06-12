@@ -15,13 +15,13 @@
 	
 </script>
 
-<nav>
+<!-- <nav>
 	<ul class="flex  gap-4 justify-center bg-zinc-950">
 		{#each navLinks as link}
 		<li class="underline hover:underline-offset-6 text-green-600"><a href={link.link}>{link.name}</a></li>
 		{/each}
 	</ul>
-</nav>
+</nav> -->
 
 
 {@render children()}
