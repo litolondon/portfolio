@@ -1,24 +1,107 @@
-<script>
+<script lang=ts>
+	import { goto } from "$app/navigation";
     import { badges } from "$lib/badges";
-	import { redirect } from "@sveltejs/kit";
+    import { texts } from "$lib/typewriter";
+	import { onMount } from "svelte";
+
+    const typingSpeed = 50;
+    const pauseDuration = 2000;
+
+	
+    let twIndex = $state(0);
+    let displayText = $state('');
+    let isTyping = $state(false);
+    
 
     function contactButton() {
-            redirect(308, "/contact")
+            goto("/contact");
     }
 
-    
+    onMount(() => {
+        function nextPhrase() {
+        const text = texts[twIndex];
+        let pos = 0;
+        isTyping = true;
+
+        function step() {
+            if (pos < text.length) {
+            pos++;
+            displayText = text.slice(0, pos);
+            setTimeout(step, typingSpeed);
+            } else {
+            isTyping = false;
+            setTimeout(() => {
+                displayText = '';
+                twIndex = (twIndex + 1) % texts.length;
+                nextPhrase();
+            }, pauseDuration);
+            }
+        }
+
+        step();
+        }
+
+        nextPhrase();
+    });
 </script>
 
-
-
-<div id="badges" class="flex gap-1 bg-gray-500  flex-wrap justify-center-safe ml-8 mr-8 p-2 pl-3 pr-3 rounded-sm">
+<main class="m-2 bg-zinc-950 font-roboto text-green-600 p-8">
+<div id="badges" class="flex gap-2 flex-wrap justify-center-safe p-2 pl-3 pr-3 rounded-sm border-green-750 border-4">
     {#each badges as badge}
-    <img class="flex align-middle h-7 rounded-md " src={badge.src} alt={badge.alt}>
+    <img class="flex align-middle h-7 rounded-md border-dashed border-green-900 border-1" src={badge.src} alt={badge.alt}>
     {/each}
 </div>
 
-<h1 class="text-3xl flex justify-center mt-2 font-bold">carlito london,</h1>
-<h2 class="text-2xl flex justify-center">web developer. problem solver. lifelong learner</h2>
-<p class="text-lg flex justify-center">an aspiring web developer dedicated to mastering the craft of building for the web</p>
 
-<button onclick={contactButton} class="hover:cursor-pointer">reach out</button>
+<!-- <pre  class="justify-self-end">
+    ++++++++++++++++================
+    ++++++++++*#%%**###%%%%+========
+    ++++++#%@@@@@@@@@@@@@@@%+=======
+    *++++*#@@@@@@@@@@@@@@@@@@@*=====
+    ****#@@@@@@@@@@@@@@@@@@@@@@%++==
+    ***%@@@@@@@@@@%%#%%##%@@@@@@%+++
+    **%@@@@@@@@@%#*+==++**#%@@@@@%++
+    #@@@@@@@%@@%#*++====++*#@@@@@%++
+    #@@@@@@@@@%#######+++#%#%@@@@#++
+    #%@@@@@@@@#***%%**++*##%%@@@%+++
+    #@@@@@@%#%#*++++=+++**+*#@@%@*++
+    #@@@@@@%*%%*+=-==++=-+*+*@@**+++
+    #%@@@@@@@@%#*++++***#%%%%%*****+
+    ##%@@@@@@%@%##***+===*#%%#******
+    ####@@@@%%%%%%#*++***#%%#*******
+    ####%@##*+=####%#*++*#%*********
+    ######***++::=#%@%%%@@%*********
+    ####**++++++-:::-###++**********
+    ##****+++++++=:::::--+**********
+    **+++**+++++++=:::---==+**#*****
+    +++++++++++++++=:::-:-=-+*******
+    ++==+++++==+++++=::-:---++****#*
+    =====+=====++++++::-::--++****#*
+    =============++++*:-::--=++***#*
+    ==============++++=:::--=++***##
+    =-==========++-+++*-:-:-=++**###
+    =============++==+++:-:-=++**##*
+    =============++++=+*-::-=+++###*
+</pre> -->
+
+<section class="flex-column justify-items-start">
+    <h1 class="text-2xl mt-2">carlito london,</h1>
+    <div>
+        <h2 class="text-2xl inline-block">{displayText}</h2>
+        <span class="animate-twcursor inline-block">|</span>
+    </div>
+</section>
+
+<div class="flex justify-center">
+    <button onclick={contactButton} class="hover:cursor-pointer  border-2 rounded-sm p-1.5">reach out</button>
+</div>
+
+</main>
+
+
+<style>
+    * { 
+        font-family: 'Space Grotesk';
+        font-family: 'Roboto', sans-serif;
+    }
+</style>

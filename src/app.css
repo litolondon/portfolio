@@ -1,1 +1,9 @@
 @import 'tailwindcss';
+
+@theme {
+    --animate-twcursor: blink 1s steps(2) infinite;
+    @keyframes blink {
+        0% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+}

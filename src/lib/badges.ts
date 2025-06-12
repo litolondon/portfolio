@@ -19,10 +19,7 @@ export const badges = [
     {src: "https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white", alt: "Tailwind Badge"},
     {src: "https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white", alt: "Vite Badge"},
     {src: "https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white", alt: "Cloudflare Badge"},
-    {src: "https://img.shields.io/badge/Microsoft_Office-D83B01?style=for-the-badge&logo=microsoft-office&logoColor=white", alt: "Microsoft Office Badge"},
-    {src: "", alt: ""},
-    {src: "", alt: ""},
-    {src: "", alt: ""}
+    {src: "https://img.shields.io/badge/Microsoft_Office-D83B01?style=for-the-badge&logo=microsoft-office&logoColor=white", alt: "Microsoft Office Badge"}
 
 ];
 
