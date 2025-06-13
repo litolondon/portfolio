@@ -8,16 +8,16 @@
     import { texts } from "$lib/typewriter";
 	import { onMount } from "svelte";
 
-    const typingSpeed = 50;
-    const pauseDuration = 2000;
+    const typingSpeed: number = 50;
+    const pauseDuration: number = 2000;
 
 	
-    let twIndex = $state(0);
-    let displayText = $state('');
-    let isTyping = $state(false);
+    let twIndex: number = $state(0);
+    let displayText: string = $state('');
+    let isTyping: boolean = $state(false);
     let terminal: HTMLInputElement;
-    let command = $state();
-    let screens = $state([]);
+    let command: string = $state("");
+    let tscreens: Array<string> = $state([]);
 
     const navLinks = [
 		{name: "home", link: "/"},
@@ -29,7 +29,7 @@
     function terminalSubmit(event: SubmitEvent) {
         event.preventDefault();
 
-        screens.push(command);
+        tscreens.push(command);
 
         if (command === 'projects') {
             goto('/projects');
@@ -38,10 +38,11 @@
         } else if (command === 'contact'){
             goto('/contact')
         } else {
-            screens.push('Invaid Route or Command');
+            tscreens.push('Invaid Route or Command');
         }
 
-		command = null;
+		command = '';
+        terminal.focus();
     }
 
     function contactButton() {
@@ -105,13 +106,13 @@
             bind:this={terminal}
             bind:value={command}
             placeholder="type a command…"
-            class="border-b-2"
+            class="border-b-1 border-dashed focus:border-none focus:outline-dashed focus:outline-green-600 p-0.5"
         />
     </form>
 </div>
 
-<div class="border-3 b h-full w-full p-2 overflow-y-scroll">
-{#each screens as screen}
+<div class="border-3 b h-full w-full p-2 overflow-y-scroll" id="screens">
+{#each tscreens as screen}
 <p>carlitolondon.org ~ % {screen}</p>
 {/each}
 </div>
@@ -129,7 +130,14 @@
     * { 
         font-family: 'Space Grotesk';
         font-family: 'Roboto', sans-serif;
+        
     }
+
+    /* #screens {
+        scrollbar-track-color: black;
+        scrollbar-color: black;
+        scrollbar-base-color: oklch(62.7% 0.194 149.214);
+    } */
 </style>
 
 
