@@ -4,9 +4,10 @@
 	let { children } = $props();
 
 	import { goto, pushState } from "$app/navigation";
-    import { badges } from "$lib/badges";
+    import { badges, contactBadges } from "$lib/badges";
     import { texts } from "$lib/typewriter";
 	import { onMount } from "svelte";
+	import { page } from '$app/state';
 
     const typingSpeed: number = 50;
     const pauseDuration: number = 2000;
@@ -15,40 +16,35 @@
     let twIndex: number = $state(0);
     let displayText: string = $state('');
     let isTyping: boolean = $state(false);
-    let terminal: HTMLInputElement;
-    let command: string = $state("");
-    let tscreens: Array<string> = $state([]);
+    let isHome: boolean = $state(true);
+    let isProjects: boolean = $state(false);
+    let isContact: boolean = $state(false);
+
+
+    function handleHome(){
+        isHome = true;
+        isContact = false;
+        isProjects = false;
+    }
+    function handleProjects(){
+        isHome = false;
+        isContact = false;
+        isProjects = true;
+    }
+    function handleContact(){
+        isHome = false;
+        isContact = true;
+        isProjects = false;
+    }
+
+
 
     const navLinks = [
-		{name: "home", link: "/"},
+		{name: "home", link: "/",},
 		{name: "projects", link: "/projects"},
-		{name: "about", link: "/about"},
 		{name: "contact", link: "/contact"}
 	];
     
-    function terminalSubmit(event: SubmitEvent) {
-        event.preventDefault();
-
-        tscreens.push(command);
-
-        if (command === 'projects') {
-            goto('/projects');
-        } else if (command === 'about'){
-            goto('/about')
-        } else if (command === 'contact'){
-            goto('/contact')
-        } else {
-            tscreens.push('Invaid Route or Command');
-        }
-
-		command = '';
-        terminal.focus();
-    }
-
-    function contactButton() {
-            goto("/contact");
-    }
-
     onMount(() => {
         function nextPhrase() {
         const text = texts[twIndex];
@@ -75,16 +71,16 @@
 
         nextPhrase();
 
-        //focus terminal
-        terminal.focus();
+
     });
 
 </script>
 
-<main class="m-2 bg-zinc-950 font-roboto text-green-600 p-7 flex h-98">
+<main class="m-2 bg-zinc-950 font-roboto text-green-600 p-7 flex-column" style="height: 90dvh;">
+
 <div class="flex-column justify-between h-fit">
     <section class="flex-column justify-items-start h-26 w-144">
-        <h1 class="text-2xl mt-1">carlito london,</h1>
+        <h1 class="text-4xl mt-1">i'm carlito london,</h1>
         <div>
             <h2 class="text-2xl inline-block">{displayText}</h2>
             <span class="animate-twcursor inline-block">|</span>
@@ -92,38 +88,50 @@
     </section>
     <br>
     <ul class="gap-4 font-roboto text-green-600">
-        {#each navLinks as link}
-        <li class=" text-xl hover:text-green-300 hover: cursor-pointer"><a href={link.link}>{link.name}</a></li>
-        {/each}
+        <li class=" text-xl hover:text-green-300 hover: cursor-pointer" onclick={handleHome}><p href="/">home</p></li>
+        <li class=" text-xl hover:text-green-300 hover: cursor-pointer" onclick={handleProjects}><p href="/projects">projects</p></li>
+        <li class=" text-xl hover:text-green-300 hover: cursor-pointer" onclick={handleContact}><p href="/contact">contact</p></li>
     </ul>
     <br>
     <br>
-
-    <form name="terminal" onsubmit={terminalSubmit}>
-        <label for="terminal">carlitolondon.org ~ %</label>
-        <input
-            type="text"
-            bind:this={terminal}
-            bind:value={command}
-            placeholder="type a command…"
-            class="border-b-1 border-dashed focus:border-none focus:outline-dashed focus:outline-green-600 p-0.5"
-        />
-    </form>
 </div>
 
-<div class="border-3 b h-full w-full p-2 overflow-y-scroll" id="screens">
-{#each tscreens as screen}
-<p>carlitolondon.org ~ % {screen}</p>
-{/each}
-</div>
-
-<!-- <div id="badges" class="flex gap-3 flex-wrap justify-between p-2 pl-6 pr-6 m-2 rounded-sm border-green-750 border-4 w-72">
+<div class="absolute top-8 right-16">
+<h1 class="text-center font-bold text-green-300">Skills</h1>
+<div id="badges" class="flex gap-3 flex-wrap justify-between p-2 pl-6 pr-6 m-2 rounded-sm border-green-750 border-4 w-72">
     {#each badges as badge}
     <img class="flex align-middle h-7 rounded-md border-dashed border-green-900 border-1 flex-auto" src={badge.src} alt={badge.alt}>
     {/each}
-</div> -->
+</div>
+</div>
+
+
+{#if isHome}
+<div>
+    <p>A entry-level web developer, based in Little Rock, Arkansas.</p>
+    <p>Turning ideas into reality, led to coding. While coding itself, led to a hunger for learning.</p>
+</div>
+
+{/if}
+
+{#if isProjects}
+<div class="border"></div>
+{/if}
+{#if isContact}
+<div class="border">
+    <h1 class="flex">contact</h1>
+    {#each contactBadges as badge}
+    <a href={badge.href}><img src={badge.src} alt={badge.alt}></a>
+    {/each}
+</div>
+{/if}
+
+
+
 
 </main>
+
+
 
 
 <style>
@@ -132,12 +140,6 @@
         font-family: 'Roboto', sans-serif;
         
     }
-
-    /* #screens {
-        scrollbar-track-color: black;
-        scrollbar-color: black;
-        scrollbar-base-color: oklch(62.7% 0.194 149.214);
-    } */
 </style>
 
 
